@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HridoyCast</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+:root{
+  --green:#0bbf6a;
+  --black:#111;
+  --gray:#f5f5f5;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Arial}
+body{background:#fff;color:#000}
+
+/* HEADER */
+header{
+  height:280px;
+  background:url('https://i.ibb.co.com/Xf2YFpGZ/20260105-013209.jpg') center/cover no-repeat;
+  position:relative;
+}
+header::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to right,rgba(0,0,0,.7),rgba(0,0,0,.2));
+}
+.header-inner{
+  position:relative;
+  z-index:2;
+  height:100%;
+  display:flex;
+  align-items:center;
+  gap:20px;
+  padding:30px;
+}
+.header-inner img{width:120px}
+.header-inner h1{color:#fff;font-size:44px}
+.header-inner p{color:#caffdf;margin-top:6px}
+
+/* MAIN */
+.main{
+  max-width:1500px;
+  margin:30px auto;
+  padding:0 20px;
+  display:grid;
+  grid-template-columns:2.2fr 1fr;
+  gap:30px;
+}
+
+/* PLAYER */
+.player-box{
+  background:#000;
+  border-radius:18px;
+  padding:12px;
+}
+video{
+  width:100%;
+  height:520px;
+  background:#000;
+  border-radius:14px;
+}
+.now-playing{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:12px;
+  background:var(--gray);
+  border-radius:12px;
+  margin-top:12px;
+}
+.now-playing img{
+  width:50px;
+  height:50px;
+  object-fit:contain;
+}
+.now-playing span{
+  font-size:18px;
+  font-weight:600;
+}
+
+/* CHANNEL LIST */
+.channels{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+.channel{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:16px;
+  border-radius:16px;
+  border:1px solid #eee;
+  cursor:pointer;
+  transition:.25s;
+  background:#fff;
+}
+.channel:hover{
+  border-color:var(--green);
+  transform:translateY(-4px);
+}
+.channel img{
+  width:70px;
+  height:70px;
+  object-fit:contain;
+}
+.channel h3{font-size:20px}
+
+/* FOOTER */
+footer{
+  background:#0d0d0d;
+  color:#ccc;
+  margin-top:60px;
+}
+.footer-inner{
+  max-width:1400px;
+  margin:auto;
+  padding:35px 20px;
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr;
+  gap:30px;
+}
+footer h4{
+  color:#0bbf6a;
+  margin-bottom:12px;
+}
+footer a{
+  color:#ccc;
+  text-decoration:none;
+  display:block;
+  margin-bottom:8px;
+}
+footer a:hover{color:#0bbf6a}
+.footer-bottom{
+  border-top:1px solid #222;
+  text-align:center;
+  padding:15px;
+  font-size:14px;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+  .main{grid-template-columns:1fr}
+  video{height:260px}
+  header{height:220px}
+  .footer-inner{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+    <img src="https://i.ibb.co.com/rRsb11tP/20260105-012719.jpg">
+    <div>
+      <h1>HridoyCast</h1>
+      <p>Live Sports & News</p>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+  <!-- PLAYER -->
+  <div>
+    <div class="player-box">
+      <video id="video" controls autoplay></video>
+    </div>
+    <div class="now-playing">
+      <img id="nowLogo">
+      <span id="nowName"></span>
+    </div>
+  </div>
+
+  <!-- CHANNEL LIST -->
+  <div class="channels">
+    <div class="channel" onclick="play('Jamuna TV','https://i.ibb.co.com/1tFvz6Hp/image-search-1767082029929.png','https://hridoytv.hridoyx.workers.dev/channel/jamunatv')">
+      <img src="https://i.ibb.co.com/1tFvz6Hp/image-search-1767082029929.png">
+      <h3>Jamuna TV</h3>
+    </div>
+
+    <div class="channel" onclick="play('T Sports','https://i.ibb.co.com/4RJ3wwh4/image-search-1767080731612.jpg','https://hridoytv.hridoyx.workers.dev/channel/tsports')">
+      <img src="https://i.ibb.co.com/4RJ3wwh4/image-search-1767080731612.jpg">
+      <h3>T Sports</h3>
+    </div>
+
+    <div class="channel" onclick="play('A Sports','https://i.ibb.co.com/KjJsvp0T/In-Shot-20251218-104524001.jpg','https://hridoytv.hridoyx.workers.dev/channel/as')">
+      <img src="https://i.ibb.co.com/KjJsvp0T/In-Shot-20251218-104524001.jpg">
+      <h3>A Sports</h3>
+    </div>
+
+    <div class="channel" onclick="play('Ekhon TV','https://i.ibb.co.com/GvmFpZmk/In-Shot-20251218-012425636.jpg','https://hridoytv.hridoyx.workers.dev/channel/ekhon')">
+      <img src="https://i.ibb.co.com/GvmFpZmk/In-Shot-20251218-012425636.jpg">
+      <h3>Ekhon TV</h3>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <h4>HridoyCast</h4>
+      <p>Live Sports & News streaming platform.<br>
+      Founder & CEO: হোসাইন হৃদয়</p>
+    </div>
+
+    <div>
+      <h4>Menu</h4>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+      <a href="#">Report</a>
+    </div>
+
+    <div>
+      <h4>Contact</h4>
+      <p>Email:<br>hossain.hridoy@hotmail.com</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 HridoyCast • A product of Lembux Group
+  </div>
+</footer>
+
+<script>
+let hls;
+function play(name,logo,url){
+  const v=document.getElementById('video');
+  document.getElementById('nowName').innerText=name;
+  document.getElementById('nowLogo').src=logo;
+
+  if(Hls.isSupported()){
+    if(hls)hls.destroy();
+    hls=new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(v);
+  }else{
+    v.src=url;
+  }
+}
+play(
+  'Jamuna TV',
+  'https://i.ibb.co.com/1tFvz6Hp/image-search-1767082029929.png',
+  'https://hridoytv.hridoyx.workers.dev/channel/jamunatv'
+);
+</script>
+
+</body>
+  </html>

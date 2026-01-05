@@ -3,150 +3,181 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HridoyCast</title>
+<title>HridoyCast – Live Sports & News</title>
+
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 :root{
-  --green:#0bbf6a;
-  --black:#111;
-  --gray:#f5f5f5;
+  --green:#00ff9c;
+  --dark:#050505;
+  --glass:rgba(255,255,255,.12);
 }
-*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Arial}
-body{background:#fff;color:#000}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Segoe UI,Arial;
+}
+body{
+  background:
+    radial-gradient(circle at top,#0b3d2a,#020202 60%);
+  color:#fff;
+  animation:fade .6s ease;
+}
+@keyframes fade{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1}
+}
 
-/* HEADER */
+/* ===== HEADER ===== */
 header{
-  height:280px;
-  background:url('https://i.ibb.co.com/Xf2YFpGZ/20260105-013209.jpg') center/cover no-repeat;
-  position:relative;
+  padding:50px 20px;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.4),#000),
+    url("https://i.ibb.co.com/Xf2YFpGZ/20260105-013209.jpg")
+    center/cover;
 }
-header::after{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:linear-gradient(to right,rgba(0,0,0,.7),rgba(0,0,0,.2));
-}
-.header-inner{
-  position:relative;
-  z-index:2;
-  height:100%;
+.header{
+  max-width:1200px;
+  margin:auto;
   display:flex;
   align-items:center;
   gap:20px;
-  padding:30px;
 }
-.header-inner img{width:120px}
-.header-inner h1{color:#fff;font-size:44px}
-.header-inner p{color:#caffdf;margin-top:6px}
+.header img{width:90px}
+.header h1{
+  font-size:34px;
+  text-shadow:0 0 20px var(--green);
+}
+.header p{color:#9dffd9}
 
-/* MAIN */
+/* ===== LAYOUT ===== */
 .main{
-  max-width:1500px;
+  max-width:1200px;
   margin:30px auto;
-  padding:0 20px;
+  padding:16px;
   display:grid;
-  grid-template-columns:2.2fr 1fr;
-  gap:30px;
+  grid-template-columns:380px 1fr;
+  gap:24px;
 }
 
-/* PLAYER */
-.player-box{
+/* ===== PLAYER ===== */
+.player{
   background:#000;
-  border-radius:18px;
-  padding:12px;
+  padding:14px;
+  border-radius:22px;
+  box-shadow:
+    0 0 40px rgba(0,255,156,.35);
+  position:relative;
+}
+.player::after{
+  content:"LIVE";
+  position:absolute;
+  top:14px;
+  left:14px;
+  background:red;
+  padding:5px 12px;
+  border-radius:8px;
+  font-size:12px;
+  box-shadow:0 0 10px red;
 }
 video{
   width:100%;
-  height:520px;
-  background:#000;
-  border-radius:14px;
+  height:230px;
+  border-radius:16px;
 }
-.now-playing{
+.now{
   display:flex;
   align-items:center;
-  gap:14px;
-  padding:12px;
-  background:var(--gray);
-  border-radius:12px;
+  gap:12px;
   margin-top:12px;
 }
-.now-playing img{
-  width:50px;
-  height:50px;
-  object-fit:contain;
+.now img{
+  width:42px;
 }
-.now-playing span{
-  font-size:18px;
+.now span{
   font-weight:600;
+  font-size:17px;
 }
 
-/* CHANNEL LIST */
+/* ===== CHANNELS ===== */
 .channels{
-  display:flex;
-  flex-direction:column;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
   gap:18px;
 }
 .channel{
-  display:flex;
-  align-items:center;
-  gap:16px;
-  padding:16px;
-  border-radius:16px;
-  border:1px solid #eee;
+  background:var(--glass);
+  backdrop-filter:blur(18px);
+  border-radius:20px;
+  padding:18px 10px;
+  text-align:center;
   cursor:pointer;
-  transition:.25s;
-  background:#fff;
+  transition:.35s;
+  border:1px solid rgba(255,255,255,.15);
 }
 .channel:hover{
+  transform:translateY(-10px) scale(1.05);
+  box-shadow:0 0 30px rgba(0,255,156,.4);
+}
+.channel.active{
   border-color:var(--green);
-  transform:translateY(-4px);
+  box-shadow:
+    0 0 18px var(--green),
+    0 0 40px rgba(0,255,156,.6);
 }
 .channel img{
-  width:70px;
-  height:70px;
+  width:90px;
+  height:90px;
   object-fit:contain;
+  filter:drop-shadow(0 0 12px rgba(0,255,156,.5));
 }
-.channel h3{font-size:20px}
+.channel h3{
+  margin-top:12px;
+  font-size:16px;
+}
 
-/* FOOTER */
+/* ===== FOOTER ===== */
 footer{
-  background:#0d0d0d;
-  color:#ccc;
-  margin-top:60px;
-}
-.footer-inner{
-  max-width:1400px;
-  margin:auto;
-  padding:35px 20px;
-  display:grid;
-  grid-template-columns:2fr 1fr 1fr;
-  gap:30px;
-}
-footer h4{
-  color:#0bbf6a;
-  margin-bottom:12px;
-}
-footer a{
-  color:#ccc;
-  text-decoration:none;
-  display:block;
-  margin-bottom:8px;
-}
-footer a:hover{color:#0bbf6a}
-.footer-bottom{
-  border-top:1px solid #222;
+  margin-top:40px;
+  background:#000;
+  padding:20px;
   text-align:center;
-  padding:15px;
-  font-size:14px;
+}
+.footer-menu{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  margin-bottom:10px;
+}
+.footer-menu span{
+  cursor:pointer;
+  color:var(--green);
 }
 
-/* MOBILE */
+/* ===== POPUP ===== */
+.popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+.popup-box{
+  background:#0c0c0c;
+  padding:22px;
+  border-radius:18px;
+  max-width:400px;
+  width:90%;
+  box-shadow:0 0 40px var(--green);
+}
+.close{text-align:right;cursor:pointer}
+
+/* ===== MOBILE ===== */
 @media(max-width:900px){
   .main{grid-template-columns:1fr}
-  video{height:260px}
-  header{height:220px}
-  .footer-inner{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -154,7 +185,7 @@ footer a:hover{color:#0bbf6a}
 <body>
 
 <header>
-  <div class="header-inner">
+  <div class="header">
     <img src="https://i.ibb.co.com/rRsb11tP/20260105-012719.jpg">
     <div>
       <h1>HridoyCast</h1>
@@ -164,83 +195,97 @@ footer a:hover{color:#0bbf6a}
 </header>
 
 <div class="main">
-  <!-- PLAYER -->
+
   <div>
-    <div class="player-box">
+    <div class="player">
       <video id="video" controls autoplay></video>
     </div>
-    <div class="now-playing">
+    <div class="now">
       <img id="nowLogo">
       <span id="nowName"></span>
     </div>
   </div>
 
-  <!-- CHANNEL LIST -->
   <div class="channels">
-    <div class="channel" onclick="play('Jamuna TV','https://i.ibb.co.com/1tFvz6Hp/image-search-1767082029929.png','https://hridoytv.hridoyx.workers.dev/channel/jamunatv')">
+    <div class="channel"
+      onclick="play(this,'Jamuna TV','https://i.ibb.co.com/1tFvz6Hp/image-search-1767082029929.png','https://hridoytv.hridoyx.workers.dev/channel/jamunatv')">
       <img src="https://i.ibb.co.com/1tFvz6Hp/image-search-1767082029929.png">
       <h3>Jamuna TV</h3>
     </div>
 
-    <div class="channel" onclick="play('T Sports','https://i.ibb.co.com/4RJ3wwh4/image-search-1767080731612.jpg','https://hridoytv.hridoyx.workers.dev/channel/tsports')">
+    <div class="channel"
+      onclick="play(this,'T Sports','https://i.ibb.co.com/4RJ3wwh4/image-search-1767080731612.jpg','https://hridoytv.hridoyx.workers.dev/channel/tsports')">
       <img src="https://i.ibb.co.com/4RJ3wwh4/image-search-1767080731612.jpg">
       <h3>T Sports</h3>
     </div>
 
-    <div class="channel" onclick="play('A Sports','https://i.ibb.co.com/KjJsvp0T/In-Shot-20251218-104524001.jpg','https://hridoytv.hridoyx.workers.dev/channel/as')">
+    <div class="channel"
+      onclick="play(this,'A Sports','https://i.ibb.co.com/KjJsvp0T/In-Shot-20251218-104524001.jpg','https://hridoytv.hridoyx.workers.dev/channel/as')">
       <img src="https://i.ibb.co.com/KjJsvp0T/In-Shot-20251218-104524001.jpg">
       <h3>A Sports</h3>
     </div>
 
-    <div class="channel" onclick="play('Ekhon TV','https://i.ibb.co.com/GvmFpZmk/In-Shot-20251218-012425636.jpg','https://hridoytv.hridoyx.workers.dev/channel/ekhon')">
+    <div class="channel"
+      onclick="play(this,'Ekhon TV','https://i.ibb.co.com/GvmFpZmk/In-Shot-20251218-012425636.jpg','https://hridoytv.hridoyx.workers.dev/channel/ekhon')">
       <img src="https://i.ibb.co.com/GvmFpZmk/In-Shot-20251218-012425636.jpg">
       <h3>Ekhon TV</h3>
     </div>
   </div>
+
 </div>
 
 <footer>
-  <div class="footer-inner">
-    <div>
-      <h4>HridoyCast</h4>
-      <p>Live Sports & News streaming platform.<br>
-      Founder & CEO: হোসাইন হৃদয়</p>
-    </div>
-
-    <div>
-      <h4>Menu</h4>
-      <a href="#">About</a>
-      <a href="#">Contact</a>
-      <a href="#">Report</a>
-    </div>
-
-    <div>
-      <h4>Contact</h4>
-      <p>Email:<br>hossain.hridoy@hotmail.com</p>
-    </div>
+  <div class="footer-menu">
+    <span onclick="popupOpen('about')">About</span>
+    <span onclick="popupOpen('contact')">Contact</span>
   </div>
-  <div class="footer-bottom">
-    © 2026 HridoyCast • A product of Lembux Group
-  </div>
+  © 2026 HridoyCast
 </footer>
 
+<div class="popup" id="popup">
+  <div class="popup-box">
+    <div class="close" onclick="closePopup()">✕</div>
+    <div id="popupContent"></div>
+  </div>
+</div>
+
 <script>
+const video=document.getElementById('video');
+const nowName=document.getElementById('nowName');
+const nowLogo=document.getElementById('nowLogo');
+const popup=document.getElementById('popup');
+const popupContent=document.getElementById('popupContent');
 let hls;
-function play(name,logo,url){
-  const v=document.getElementById('video');
-  document.getElementById('nowName').innerText=name;
-  document.getElementById('nowLogo').src=logo;
+
+function play(el,name,logo,url){
+  document.querySelectorAll('.channel')
+    .forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+
+  nowName.textContent=name;
+  nowLogo.src=logo;
 
   if(Hls.isSupported()){
-    if(hls)hls.destroy();
+    if(hls) hls.destroy();
     hls=new Hls();
     hls.loadSource(url);
-    hls.attachMedia(v);
+    hls.attachMedia(video);
   }else{
-    v.src=url;
+    video.src=url;
   }
 }
+
+function popupOpen(type){
+  popupContent.innerHTML=
+    type==='about'
+    ? '<h2>About</h2><p>HridoyCast – Premium Live TV Platform</p>'
+    : '<h2>Contact</h2><p>Email: hossain.hridoy@hotmail.com</p>';
+  popup.style.display='flex';
+}
+function closePopup(){popup.style.display='none'}
+
 play(
+  document.querySelector('.channel'),
   'Jamuna TV',
   'https://i.ibb.co.com/1tFvz6Hp/image-search-1767082029929.png',
   'https://hridoytv.hridoyx.workers.dev/channel/jamunatv'
@@ -248,4 +293,4 @@ play(
 </script>
 
 </body>
-  </html>
+</html>

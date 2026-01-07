@@ -1,230 +1,301 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HridoyCast – Premium Live TV</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <style>
-        :root {
-            --green: #008751;
-            --dark-green: #005e38;
-            --bg: #f0f2f5;
-            --shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HridoyCast – Premium Live TV</title>
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: var(--bg); overflow-x: hidden; }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-        /* ===== SPLASH SCREEN ===== */
-        #splash {
-            position: fixed; inset: 0; background: #fff;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s;
-        }
-        #splash img { width: 100px; margin-bottom: 10px; animation: pulse 1.5s infinite; }
-        #splash h2 { color: var(--green); font-size: 24px; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+<style>
+:root{
+  --green:#008751;
+  --dark:#005e38;
+  --bg:#f0f2f5;
+  --shadow:0 6px 18px rgba(0,0,0,.12);
+}
 
-        /* ===== HEADER ===== */
-        header {
-            background: var(--green); height: 65px; display: flex; align-items: center;
-            position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .header-inner { max-width: 1300px; width: 100%; margin: auto; display: flex; align-items: center; padding: 0 15px; gap: 12px; }
-        /* লোগো থেকে সাদা ব্যাকগ্রাউন্ড সরানো হয়েছে */
-        header img { width: 40px; height: 40px; border-radius: 4px; }
-        header h1 { font-size: 20px; color: #fff; font-weight: bold; }
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,sans-serif}
+body{background:var(--bg);color:#222}
 
-        /* ===== MAIN LAYOUT ===== */
-        .main { max-width: 1300px; margin: 20px auto; padding: 0 15px; display: grid; grid-template-columns: 1fr 400px; gap: 20px; align-items: start; }
-        .player-side { position: sticky; top: 85px; }
-        @media(max-width:900px) { .main { grid-template-columns: 1fr; } .player-side { position: relative; top: 0; } }
+/* ===== SPLASH ===== */
+#splash{
+  position:fixed;inset:0;
+  background:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+#splash img{width:120px;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
 
-        /* ===== PLAYER AREA ===== */
-        .player-container { background: #fff; border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; }
-        .player-wrap { 
-            position: relative; background: #000; aspect-ratio: 16/9; 
-            display: flex; align-items: center; justify-content: center;
-        }
-        #playerLogo {
-            position: absolute; width: 120px; z-index: 5; pointer-events: none; opacity: 1; transition: 0.5s;
-        }
-        video { width: 100%; height: 100%; position: relative; z-index: 2; }
+/* ===== HEADER ===== */
+header{
+  background:var(--green);
+  height:70px;
+  display:flex;
+  align-items:center;
+  box-shadow:0 4px 10px rgba(0,0,0,.2);
+}
+.header-inner{
+  max-width:1400px;
+  margin:auto;
+  padding:0 20px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+header img{width:48px}
+header h1{color:#fff;font-size:22px}
 
-        .controls-bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: #fff; }
-        .now-info { display: flex; align-items: center; gap: 10px; }
-        .now-info img { width: 45px; height: 45px; object-fit: contain; border: 1px solid #eee; border-radius: 5px; }
-        
-        .fs-btn {
-            background: var(--green); color: white; border: none; padding: 10px 18px;
-            border-radius: 8px; cursor: pointer; font-weight: bold; display: flex;
-            align-items: center; gap: 8px; transition: 0.3s;
-        }
-        .fs-btn:hover { background: var(--dark-green); }
+/* ===== MAIN LAYOUT ===== */
+.main{
+  max-width:1400px;
+  margin:25px auto;
+  padding:0 20px;
+  display:grid;
+  grid-template-columns:1.6fr 1fr;
+  gap:30px;
+  align-items:flex-start;
+}
 
-        /* ===== CHANNEL PANEL ===== */
-        .panel { background: #fff; border-radius: 12px; box-shadow: var(--shadow); display: flex; flex-direction: column; height: 75vh; }
-        .panel-header { background: var(--green); color: #fff; padding: 15px; font-weight: bold; border-radius: 12px 12px 0 0; display: flex; align-items: center; gap: 8px; }
-        .channel-list { padding: 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; overflow-y: auto; }
-        .channel { border: 1px solid #eee; border-radius: 8px; padding: 10px 5px; text-align: center; cursor: pointer; transition: 0.2s; background: #fcfcfc; }
-        .channel:hover { border-color: var(--green); background: #f0fff9; transform: scale(1.02); }
-        .channel img { height: 35px; max-width: 80%; object-fit: contain; margin-bottom: 5px; }
-        .channel h3 { font-size: 10px; color: #333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* ===== PLAYER ===== */
+.player-side{
+  position:sticky;
+  top:90px;
+}
+.player-box{
+  background:#fff;
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.player-wrap{
+  position:relative;
+  background:#000;
+  aspect-ratio:16/9;
+}
+#playerLogo{
+  position:absolute;
+  inset:0;
+  margin:auto;
+  width:120px;
+  opacity:.85;
+}
+video{width:100%;height:100%}
 
-        /* ===== FOOTER 업데이트 ===== */
-        footer { background: var(--green); color: #fff; padding: 40px 20px; text-align: center; margin-top: 50px; }
-        .footer-links { display: flex; justify-content: center; gap: 25px; margin-bottom: 20px; flex-wrap: wrap; }
-        footer a { color: #fff; text-decoration: none; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
-        footer a:hover { color: var(--dark-green); }
-        footer p { font-size: 14px; opacity: 0.9; }
+.controls{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 20px;
+}
+.now{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.now img{width:55px;height:55px;object-fit:contain}
+.fs-btn{
+  background:var(--green);
+  color:#fff;
+  border:none;
+  padding:12px 18px;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.fs-btn:focus{outline:3px solid #ffca28}
 
-        /* MODAL */
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 2000; }
-        .modal-box { background: #fff; padding: 30px; width: 90%; max-width: 400px; border-radius: 15px; text-align: center; color: #333; }
-        .m-close { background: var(--green); color: white; border: none; padding: 10px 25px; border-radius: 8px; margin-top: 20px; cursor: pointer; font-weight: bold; }
-    </style>
+/* ===== CHANNEL PANEL ===== */
+.panel{
+  background:#fff;
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  height:80vh;
+  display:flex;
+  flex-direction:column;
+}
+.panel-head{
+  background:var(--green);
+  color:#fff;
+  padding:18px;
+  font-size:18px;
+}
+.channel-list{
+  padding:18px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr); /* DESKTOP */
+  gap:18px;
+  overflow-y:auto;
+}
+.channel{
+  background:#fff;
+  border:2px solid #eee;
+  border-radius:14px;
+  padding:16px 10px;
+  text-align:center;
+  cursor:pointer;
+  transition:.25s;
+}
+.channel:focus,
+.channel:hover{
+  border-color:var(--green);
+  background:#e8f5e9;
+  transform:translateY(-4px);
+  outline:3px solid #ffca28;
+}
+.channel img{height:70px;margin-bottom:8px}
+.channel h3{font-size:14px}
+
+/* ===== FOOTER ===== */
+footer{
+  background:var(--dark);
+  color:#fff;
+  padding:35px 20px;
+  text-align:center;
+}
+.footer-links{
+  display:flex;
+  justify-content:center;
+  gap:25px;
+  flex-wrap:wrap;
+  margin-bottom:15px;
+}
+footer a{color:#fff;text-decoration:none}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .main{grid-template-columns:1fr}
+  .player-side{position:relative;top:0}
+  .channel-list{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:500px){
+  .channel-list{grid-template-columns:repeat(3,1fr)}
+  .channel img{height:48px}
+}
+</style>
 </head>
+
 <body>
 
 <div id="splash">
-    <img src="https://i.ibb.co.com/n8V6RTf9/20260105-025554.png" alt="Logo">
-    <h2>HridoyCast</h2>
+  <img src="https://i.ibb.co.com/n8V6RTf9/20260105-025554.png">
+  <h2 style="color:#008751;margin-top:10px">HridoyCast</h2>
 </div>
 
 <header>
-    <div class="header-inner">
-        <img src="https://i.ibb.co.com/n8V6RTf9/20260105-025554.png" alt="Logo">
-        <h1>HridoyCast</h1>
-    </div>
+  <div class="header-inner">
+    <img src="https://i.ibb.co.com/n8V6RTf9/20260105-025554.png">
+    <h1>HridoyCast</h1>
+  </div>
 </header>
 
 <div class="main">
-    <div class="player-side">
-        <div class="player-container">
-            <div class="player-wrap">
-                <img src="https://i.ibb.co.com/n8V6RTf9/20260105-025554.png" id="playerLogo">
-                <video id="video" controls playsinline></video>
-            </div>
-            <div class="controls-bar">
-                <div class="now-info">
-                    <img id="nowLogo" src="https://i.ibb.co.com/n8V6RTf9/20260105-025554.png">
-                    <div>
-                        <p style="font-size: 11px; color: var(--green); font-weight: bold;"><i class="fa fa-circle-play"></i> LIVE STATUS</p>
-                        <h3 id="nowName">Select a Channel</h3>
-                    </div>
-                </div>
-                <button class="fs-btn" onclick="toggleFS()">
-                    <i class="fa fa-expand"></i> Full Screen
-                </button>
-            </div>
+
+<!-- PLAYER -->
+<div class="player-side">
+  <div class="player-box">
+    <div class="player-wrap">
+      <img id="playerLogo" src="https://i.ibb.co.com/n8V6RTf9/20260105-025554.png">
+      <video id="video" controls playsinline></video>
+    </div>
+    <div class="controls">
+      <div class="now">
+        <img id="nowLogo" src="https://i.ibb.co.com/n8V6RTf9/20260105-025554.png">
+        <div>
+          <small style="color:#008751;font-weight:bold">
+            <i class="fa-solid fa-circle-dot" style="color:red"></i> LIVE
+          </small>
+          <h3 id="nowName">Select Channel</h3>
         </div>
+      </div>
+      <button class="fs-btn" onclick="fs()">
+        <i class="fa fa-expand"></i> Fullscreen
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- CHANNELS -->
+<div class="panel">
+  <div class="panel-head"><i class="fa fa-tv"></i> TV Channels</div>
+  <div class="channel-list">
+
+    <div class="channel" tabindex="0" data-name="Jamuna TV" data-url="https://hridoytv.hridoyx.workers.dev/channel/jamunatv">
+      <img src="https://i.ibb.co.com/1tFvz6Hp/image-search-1767082029929.png">
+      <h3>Jamuna TV</h3>
     </div>
 
-    <div class="panel">
-        <div class="panel-header"><i class="fa fa-tv"></i> TV Channels</div>
-        <div class="channel-list">
-            <div class="channel" data-name="Jamuna TV" data-url="https://hridoytv.hridoyx.workers.dev/channel/jamunatv">
-                <img src="https://i.ibb.co.com/1tFvz6Hp/image-search-1767082029929.png">
-                <h3>Jamuna TV</h3>
-            </div>
-            <div class="channel" data-name="Somoy TV" data-url="https://hridoytv.hridoyx.workers.dev/channel/somoytv">
-                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Somoy_TV_logo.svg/1200px-Somoy_TV_logo.svg.png">
-                <h3>Somoy TV</h3>
-            </div>
-            <div class="channel" data-name="T Sports" data-url="https://hridoytv.hridoyx.workers.dev/channel/tsports">
-                <img src="https://i.ibb.co.com/4RJ3wwh4/image-search-1767080731612.jpg">
-                <h3>T Sports</h3>
-            </div>
-            <div class="channel" data-name="GTV" data-url="https://hridoytv.hridoyx.workers.dev/channel/gtv">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/GTV_logo.png">
-                <h3>GTV Sports</h3>
-            </div>
-            <div class="channel" data-name="BTV World" data-url="https://hridoytv.hridoyx.workers.dev/channel/btvworld">
-                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/2/23/Bangladesh_Television_logo.svg/1200px-Bangladesh_Television_logo.svg.png">
-                <h3>BTV World</h3>
-            </div>
-        </div>
+    <div class="channel" tabindex="0" data-name="Somoy TV" data-url="https://hridoytv.hridoyx.workers.dev/channel/somoytv">
+      <img src="https://upload.wikimedia.org/wikipedia/en/5/5a/Somoy_TV_logo.svg">
+      <h3>Somoy TV</h3>
     </div>
+
+    <div class="channel" tabindex="0" data-name="T Sports" data-url="https://hridoytv.hridoyx.workers.dev/channel/tsports">
+      <img src="https://i.ibb.co.com/4RJ3wwh4/image-search-1767080731612.jpg">
+      <h3>T Sports</h3>
+    </div>
+
+    <div class="channel" tabindex="0" data-name="GTV" data-url="https://hridoytv.hridoyx.workers.dev/channel/gtv">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/GTV_logo.png">
+      <h3>GTV</h3>
+    </div>
+
+  </div>
+</div>
+
 </div>
 
 <footer>
-    <div class="footer-links">
-        <a onclick="openPopup('About Us', 'Welcome to HridoyCast. We provide high-quality live streaming services.')">
-            <i class="fas fa-circle-info"></i> About
-        </a>
-        <a onclick="openPopup('Contact', 'Email: support@hridoycast.com\nLocation: Dhaka, Bangladesh')">
-            <i class="fas fa-headset"></i> Contact
-        </a>
-        <a href="https://facebook.com" target="_blank">
-            <i class="fab fa-facebook"></i> Facebook
-        </a>
-    </div>
-    <p style="margin-top: 20px;">© 2026 <b>HridoyCast</b> | All Rights Reserved</p>
+  <div class="footer-links">
+    <a><i class="fa fa-circle-info"></i> About</a>
+    <a><i class="fa fa-headset"></i> Contact</a>
+    <a><i class="fab fa-facebook"></i> Facebook</a>
+  </div>
+  © 2026 HridoyCast
 </footer>
 
-<div class="modal" id="myModal">
-    <div class="modal-box">
-        <h2 id="modalTitle" style="color:var(--green)"></h2>
-        <p id="modalBody" style="margin-top:10px; white-space: pre-line;"></p>
-        <button class="m-close" onclick="closePopup()">Close</button>
-    </div>
-</div>
-
 <script>
-const video = document.getElementById("video");
-const playerLogo = document.getElementById("playerLogo");
-const nowName = document.getElementById("nowName");
-const nowLogo = document.getElementById("nowLogo");
-const channels = document.querySelectorAll(".channel");
-let hls;
+const video=document.getElementById("video");
+const logo=document.getElementById("playerLogo");
+const nameEl=document.getElementById("nowName");
+const nowLogo=document.getElementById("nowLogo");
+let hls=null;
 
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        const splash = document.getElementById('splash');
-        splash.style.opacity = '0';
-        setTimeout(() => splash.style.visibility = 'hidden', 800);
-    }, 3000);
+setTimeout(()=>document.getElementById("splash").style.display="none",2000);
+
+document.querySelectorAll(".channel").forEach(ch=>{
+  ch.onclick=()=>play(ch);
+  ch.onkeydown=e=>{if(e.key==="Enter")play(ch)};
 });
 
-function playChannel(ch) {
-    const url = ch.dataset.url;
-    nowName.innerText = ch.dataset.name;
-    nowLogo.src = ch.querySelector("img").src;
-    playerLogo.style.opacity = "1";
+function play(ch){
+  const url=ch.dataset.url;
+  nameEl.innerText=ch.dataset.name;
+  nowLogo.src=ch.querySelector("img").src;
+  logo.style.display="block";
 
-    if (Hls.isSupported()) {
-        if (hls) hls.destroy();
-        hls = new Hls();
-        hls.loadSource(url);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            video.play();
-        });
-    } else {
-        video.src = url;
-        video.onloadeddata = () => video.play();
-    }
+  if(Hls.isSupported()){
+    if(hls)hls.destroy();
+    hls=new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+  }else{
+    video.src=url;
+    video.play();
+  }
 }
+video.onplaying=()=>logo.style.display="none";
+video.onwaiting=()=>logo.style.display="block";
 
-video.addEventListener('playing', () => { playerLogo.style.opacity = "0"; });
-video.addEventListener('waiting', () => { playerLogo.style.opacity = "1"; });
-
-channels.forEach(ch => ch.onclick = () => playChannel(ch));
-
-function toggleFS() {
-    if (video.requestFullscreen) video.requestFullscreen();
-    else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
-    else if (video.msRequestFullscreen) video.msRequestFullscreen();
+function fs(){
+  if(video.requestFullscreen)video.requestFullscreen();
 }
-
-function openPopup(t, b) {
-    document.getElementById("modalTitle").innerText = t;
-    document.getElementById("modalBody").innerText = b;
-    document.getElementById("myModal").style.display = "flex";
-}
-function closePopup() { document.getElementById("myModal").style.display = "none"; }
 </script>
 
 </body>

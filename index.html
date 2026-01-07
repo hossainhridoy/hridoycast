@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HridoyCast – Premium Live TV</title>
+<title>HridoyCast – TV Edition</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
@@ -12,12 +12,12 @@
 :root{
   --green:#008751;
   --dark:#005e38;
-  --bg:#f0f2f5;
-  --shadow:0 6px 18px rgba(0,0,0,.12);
+  --bg:#121212; /* TV এর জন্য ডার্ক ব্যাকগ্রাউন্ড ভালো */
+  --highlight:#ffca28;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,sans-serif}
-body{background:var(--bg);color:#222}
+body{background:var(--bg);color:#fff; overflow-x: hidden;}
 
 /* ===== SPLASH ===== */
 #splash{
@@ -38,7 +38,7 @@ header{
   height:70px;
   display:flex;
   align-items:center;
-  box-shadow:0 4px 10px rgba(0,0,0,.2);
+  box-shadow:0 4px 10px rgba(0,0,0,0.5);
 }
 .header-inner{
   max-width:1400px;
@@ -49,29 +49,24 @@ header{
   gap:15px;
 }
 header img{width:48px}
-header h1{color:#fff;font-size:22px}
+header h1{color:#fff;font-size:24px}
 
 /* ===== MAIN LAYOUT ===== */
 .main{
   max-width:1400px;
-  margin:25px auto;
+  margin:20px auto;
   padding:0 20px;
   display:grid;
-  grid-template-columns:1.6fr 1fr;
-  gap:30px;
-  align-items:flex-start;
+  grid-template-columns:1.5fr 1fr;
+  gap:20px;
 }
 
 /* ===== PLAYER ===== */
-.player-side{
-  position:sticky;
-  top:90px;
-}
 .player-box{
-  background:#fff;
-  border-radius:16px;
-  box-shadow:var(--shadow);
+  background:#000;
+  border-radius:12px;
   overflow:hidden;
+  border: 2px solid #333;
 }
 .player-wrap{
   position:relative;
@@ -82,100 +77,72 @@ header h1{color:#fff;font-size:22px}
   position:absolute;
   inset:0;
   margin:auto;
-  width:120px;
-  opacity:.85;
+  width:100px;
+  opacity:.5;
 }
-video{width:100%;height:100%}
+video{width:100%;height:100%;display:block;}
 
 .controls{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:15px 20px;
+  padding:15px;
+  background: #1a1a1a;
 }
-.now{
-  display:flex;
-  gap:12px;
-  align-items:center;
-}
-.now img{width:55px;height:55px;object-fit:contain}
-.fs-btn{
-  background:var(--green);
-  color:#fff;
-  border:none;
-  padding:12px 18px;
-  border-radius:10px;
-  font-weight:bold;
-  cursor:pointer;
-}
-.fs-btn:focus{outline:3px solid #ffca28}
+.now{display:flex;gap:12px;align-items:center}
+.now img{width:50px;height:50px;object-fit:contain; background: #fff; border-radius: 5px;}
 
 /* ===== CHANNEL PANEL ===== */
 .panel{
-  background:#fff;
-  border-radius:16px;
-  box-shadow:var(--shadow);
-  height:80vh;
+  background:#1a1a1a;
+  border-radius:12px;
+  height:75vh;
   display:flex;
   flex-direction:column;
 }
 .panel-head{
-  background:var(--green);
-  color:#fff;
-  padding:18px;
-  font-size:18px;
+  background:var(--dark);
+  padding:15px;
+  font-size:20px;
+  border-radius:12px 12px 0 0;
 }
 .channel-list{
-  padding:18px;
+  padding:15px;
   display:grid;
-  grid-template-columns:repeat(4,1fr); /* DESKTOP */
-  gap:18px;
+  grid-template-columns:repeat(3, 1fr);
+  gap:15px;
   overflow-y:auto;
 }
+
+/* TV FOCUS STYLE - অত্যন্ত গুরুত্বপূর্ণ */
 .channel{
-  background:#fff;
-  border:2px solid #eee;
-  border-radius:14px;
-  padding:16px 10px;
+  background:#252525;
+  border:3px solid transparent;
+  border-radius:10px;
+  padding:15px 5px;
   text-align:center;
   cursor:pointer;
-  transition:.25s;
+  transition: 0.2s;
+  outline: none; /* Default outline বন্ধ */
 }
-.channel:focus,
-.channel:hover{
-  border-color:var(--green);
-  background:#e8f5e9;
-  transform:translateY(-4px);
-  outline:3px solid #ffca28;
-}
-.channel img{height:70px;margin-bottom:8px}
-.channel h3{font-size:14px}
 
-/* ===== FOOTER ===== */
-footer{
-  background:var(--dark);
-  color:#fff;
-  padding:35px 20px;
-  text-align:center;
+/* রিমোট দিয়ে ফোকাস করলে যা হবে */
+.channel:focus {
+  border-color: var(--highlight);
+  background: var(--green);
+  transform: scale(1.05);
 }
-.footer-links{
-  display:flex;
-  justify-content:center;
-  gap:25px;
-  flex-wrap:wrap;
-  margin-bottom:15px;
-}
-footer a{color:#fff;text-decoration:none}
+
+.channel img{height:60px;margin-bottom:8px; display block; margin-left: auto; margin-right: auto;}
+.channel h3{font-size:14px; color: #fff;}
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:900px){
   .main{grid-template-columns:1fr}
-  .player-side{position:relative;top:0}
-  .channel-list{grid-template-columns:repeat(3,1fr)}
+  .channel-list{grid-template-columns:repeat(4,1fr)}
 }
 @media(max-width:500px){
-  .channel-list{grid-template-columns:repeat(3,1fr)}
-  .channel img{height:48px}
+  .channel-list{grid-template-columns:repeat(2,1fr)}
 }
 </style>
 </head>
@@ -184,7 +151,7 @@ footer a{color:#fff;text-decoration:none}
 
 <div id="splash">
   <img src="https://i.ibb.co.com/n8V6RTf9/20260105-025554.png">
-  <h2 style="color:#008751;margin-top:10px">HridoyCast</h2>
+  <h2 style="color:#008751;margin-top:10px">HridoyCast TV</h2>
 </div>
 
 <header>
@@ -195,107 +162,118 @@ footer a{color:#fff;text-decoration:none}
 </header>
 
 <div class="main">
-
-<!-- PLAYER -->
-<div class="player-side">
-  <div class="player-box">
-    <div class="player-wrap">
-      <img id="playerLogo" src="https://i.ibb.co.com/n8V6RTf9/20260105-025554.png">
-      <video id="video" controls playsinline></video>
-    </div>
-    <div class="controls">
-      <div class="now">
-        <img id="nowLogo" src="https://i.ibb.co.com/n8V6RTf9/20260105-025554.png">
-        <div>
-          <small style="color:#008751;font-weight:bold">
-            <i class="fa-solid fa-circle-dot" style="color:red"></i> LIVE
-          </small>
-          <h3 id="nowName">Select Channel</h3>
+  <div class="player-side">
+    <div class="player-box">
+      <div class="player-wrap">
+        <img id="playerLogo" src="https://i.ibb.co.com/n8V6RTf9/20260105-025554.png">
+        <video id="video" controls autoplay playsinline></video>
+      </div>
+      <div class="controls">
+        <div class="now">
+          <img id="nowLogo" src="https://i.ibb.co.com/n8V6RTf9/20260105-025554.png">
+          <div>
+            <small style="color:#4caf50;font-weight:bold"><i class="fa-solid fa-circle-dot" style="color:red"></i> LIVE</small>
+            <h3 id="nowName">চ্যানেল সিলেক্ট করুন</h3>
+          </div>
         </div>
       </div>
-      <button class="fs-btn" onclick="fs()">
-        <i class="fa fa-expand"></i> Fullscreen
-      </button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><i class="fa fa-tv"></i> সব চ্যানেল</div>
+    <div class="channel-list" id="chList">
+      <div class="channel" tabindex="1" data-name="Jamuna TV" data-url="https://hridoytv.hridoyx.workers.dev/channel/jamunatv">
+        <img src="https://i.ibb.co.com/1tFvz6Hp/image-search-1767082029929.png">
+        <h3>Jamuna TV</h3>
+      </div>
+      <div class="channel" tabindex="2" data-name="Somoy TV" data-url="https://hridoytv.hridoyx.workers.dev/channel/somoytv">
+        <img src="https://upload.wikimedia.org/wikipedia/en/5/5a/Somoy_TV_logo.svg">
+        <h3>Somoy TV</h3>
+      </div>
+      <div class="channel" tabindex="3" data-name="T Sports" data-url="https://hridoytv.hridoyx.workers.dev/channel/tsports">
+        <img src="https://i.ibb.co.com/4RJ3wwh4/image-search-1767080731612.jpg">
+        <h3>T Sports</h3>
+      </div>
+      <div class="channel" tabindex="4" data-name="GTV" data-url="https://hridoytv.hridoyx.workers.dev/channel/gtv">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/GTV_logo.png">
+        <h3>GTV</h3>
+      </div>
     </div>
   </div>
 </div>
-
-<!-- CHANNELS -->
-<div class="panel">
-  <div class="panel-head"><i class="fa fa-tv"></i> TV Channels</div>
-  <div class="channel-list">
-
-    <div class="channel" tabindex="0" data-name="Jamuna TV" data-url="https://hridoytv.hridoyx.workers.dev/channel/jamunatv">
-      <img src="https://i.ibb.co.com/1tFvz6Hp/image-search-1767082029929.png">
-      <h3>Jamuna TV</h3>
-    </div>
-
-    <div class="channel" tabindex="0" data-name="Somoy TV" data-url="https://hridoytv.hridoyx.workers.dev/channel/somoytv">
-      <img src="https://upload.wikimedia.org/wikipedia/en/5/5a/Somoy_TV_logo.svg">
-      <h3>Somoy TV</h3>
-    </div>
-
-    <div class="channel" tabindex="0" data-name="T Sports" data-url="https://hridoytv.hridoyx.workers.dev/channel/tsports">
-      <img src="https://i.ibb.co.com/4RJ3wwh4/image-search-1767080731612.jpg">
-      <h3>T Sports</h3>
-    </div>
-
-    <div class="channel" tabindex="0" data-name="GTV" data-url="https://hridoytv.hridoyx.workers.dev/channel/gtv">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/GTV_logo.png">
-      <h3>GTV</h3>
-    </div>
-
-  </div>
-</div>
-
-</div>
-
-<footer>
-  <div class="footer-links">
-    <a><i class="fa fa-circle-info"></i> About</a>
-    <a><i class="fa fa-headset"></i> Contact</a>
-    <a><i class="fab fa-facebook"></i> Facebook</a>
-  </div>
-  © 2026 HridoyCast
-</footer>
 
 <script>
-const video=document.getElementById("video");
-const logo=document.getElementById("playerLogo");
-const nameEl=document.getElementById("nowName");
-const nowLogo=document.getElementById("nowLogo");
-let hls=null;
+const video = document.getElementById("video");
+const logo = document.getElementById("playerLogo");
+const nameEl = document.getElementById("nowName");
+const nowLogo = document.getElementById("nowLogo");
+let hls = null;
 
-setTimeout(()=>document.getElementById("splash").style.display="none",2000);
+// Splash Screen
+setTimeout(() => {
+  document.getElementById("splash").style.display = "none";
+  // টিভিতে যাতে শুরুতেই প্রথম চ্যানেলে ফোকাস থাকে
+  document.querySelector(".channel").focus();
+}, 2000);
 
-document.querySelectorAll(".channel").forEach(ch=>{
-  ch.onclick=()=>play(ch);
-  ch.onkeydown=e=>{if(e.key==="Enter")play(ch)};
+// চ্যানেল ক্লিক বা রিমোট ওকে (Enter) হ্যান্ডলার
+document.querySelectorAll(".channel").forEach(ch => {
+  ch.addEventListener('click', () => play(ch));
+  ch.addEventListener('keydown', (e) => {
+    if (e.key === "Enter") play(ch);
+  });
 });
 
-function play(ch){
-  const url=ch.dataset.url;
-  nameEl.innerText=ch.dataset.name;
-  nowLogo.src=ch.querySelector("img").src;
-  logo.style.display="block";
+function play(ch) {
+  const url = ch.dataset.url;
+  nameEl.innerText = ch.dataset.name;
+  nowLogo.src = ch.querySelector("img").src;
+  
+  // ভিডিও লোড হওয়ার সময় লোগো দেখাবে
+  logo.style.display = "block";
 
-  if(Hls.isSupported()){
-    if(hls)hls.destroy();
-    hls=new Hls();
+  if (Hls.isSupported()) {
+    if (hls) hls.destroy();
+    hls = new Hls({
+      enableWorker: true,
+      lowLatencyMode: true,
+      backBufferLength: 60
+    });
     hls.loadSource(url);
     hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
-  }else{
-    video.src=url;
-    video.play();
+    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      video.play().catch(e => console.log("Auto-play blocked, wait for user interaction"));
+    });
+    
+    // এরর হ্যান্ডলিং (টিভিতে অনেক সময় সোর্স ড্রপ করে)
+    hls.on(Hls.Events.ERROR, function (event, data) {
+      if (data.fatal) {
+        switch (data.type) {
+          case Hls.ErrorTypes.NETWORK_ERROR: hls.startLoad(); break;
+          case Hls.ErrorTypes.MEDIA_ERROR: hls.recoverMediaError(); break;
+          default: play(ch); break;
+        }
+      }
+    });
+
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    // সাফারী বা অ্যাপল ডিভাইসের জন্য
+    video.src = url;
+    video.addEventListener('loadedmetadata', () => video.play());
   }
 }
-video.onplaying=()=>logo.style.display="none";
-video.onwaiting=()=>logo.style.display="block";
 
-function fs(){
-  if(video.requestFullscreen)video.requestFullscreen();
-}
+video.onplaying = () => logo.style.display = "none";
+video.onwaiting = () => logo.style.display = "block";
+
+// TV Remote Navigation (Optional but helpful)
+document.addEventListener('keydown', (e) => {
+  const active = document.activeElement;
+  if(active.classList.contains('channel')){
+      // এখানে বাড়তি নেভিগেশন লজিক যোগ করা যায় যদি প্রয়োজন হয়
+  }
+});
 </script>
 
 </body>
